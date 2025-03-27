@@ -1,26 +1,16 @@
-let mongoose = require("mongoose");
-const ProductAttributeSchema = new mongoose.Schema(
-  {
-    product: { type: mongoose.Types.ObjectId, ref: "Product", required: true },
-    weight: {
-      type: Number,
-    },
-    original_price: {
-      type: Number,
-      required: true,
-    },
-    discounted_percent: {
-      type: Number,
-      default: 0,
-    },
-    discounted_price: {
-      type: Number,
-      required: true,
-    },
-    color: {
-      type: String,
-    },
-  },
-  { timestamps: true }
-);
-module.exports = mongoose.model("productatribute", ProductAttributeSchema);
+const mongoose = require('mongoose');
+
+const productAttributeSchema = new mongoose.Schema({
+    product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    weight: { type: Number, default: 0 },
+    original_price: { type: Number, default: 0 },
+    discount_price: { type: Number, default: 0 },
+    discount_percent: { type: Number, default: 0 },
+    quantity: { type: Number, default: 0 },
+    color: { type: String, default: '' },
+    is_deleted: { type: Boolean, default: false }
+}, {
+    timestamps: true,
+});
+
+module.exports = mongoose.model('ProductAttribute', productAttributeSchema);

@@ -1,76 +1,35 @@
-let mongoose = require("mongoose");
-let productSchema = mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    slug: {
-      type: String,
-      default: 0,
-      default: "",
-    },
-    origin: {
-      type: String,
-      default: "",
-    },
-    sold: {
-      type: Number,
-      default: 0,
-    },
-    quantity: {
-      type: Number,
-      default: 0,
-      required: true,
-      min: 0,
-    },
-    rating: {
-      type: Number,
-      default: 0,
-    },
+const mongoose = require('mongoose');
 
-    description: {
-      type: String,
-      default: "",
-    },
-    urlImg: {
-      type: String,
-      default: "",
-    },
-    images: { type: [String] },
-    is_active: {
-      type: Boolean,
-      default: true,
-    },
-    hot: { type: Boolean, default: false },
-    category: {
-      type: mongoose.Types.ObjectId,
-      ref: "category",
-      required: true,
-    },
-    isDeleted: {
-      type: Boolean,
-      default: false,
-    },
-    supplier: {
-      type: mongoose.Types.ObjectId,
-      ref: "Supplier",
-      required: true,
-    },
-    category: {
-      type: mongoose.Types.ObjectId,
-      ref: "Category",
-      required: true,
-    },
+const productSchema = new mongoose.Schema({
+  name: { type: String, required: true, unique: true },
+  slug: { type: String, required: true, unique: true },
+  description: { type: String, default: '' },
+  origin: { type: String, default: '' },
+  sold: { type: Number, default: 0 },
+  supplier: { type: mongoose.Schema.Types.ObjectId, ref: 'supplier' },
+  category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
+  thumbnail_url: { type: String, default: '' },
+  rating: { type: Number, default: 0 },
+  images: { type: Array, default: '' },
+  numberOfReview: { type: Number, default: 0 },
+  is_active: { type: Boolean, default: true },
+  _destroy: { type: Boolean, default: false },
+  hot: { type: Boolean, default: false },
+  is_deleted: { type: Boolean, default: false }
+}, {
+  timestamps: true,
+  toJSON: {
+    virtuals: true
   },
-  {
-    timestamps: true,
+  toObject: {
+    virtuals: true
   }
-);
-module.exports = mongoose.model("product", productSchema);
+});
+
+productSchema.virtual('productAttributes', {
+  ref: 'ProductAttribute', // Tên model ProductAttribute
+  localField: '_id', // Trường trong Product
+  foreignField: 'product_id' // Trường tham chiếu trong ProductAttribute
+});
+
+module.exports = mongoose.model('Product', productSchema);
