@@ -1,26 +1,26 @@
 var express = require('express');
 var router = express.Router();
-let productController = require('../controllers/product');
+let supplierController = require('../controllers/supplier');
 let { CreateSuccessResponse } = require('../utils/responseHandler');
 let { check_authentication, check_authorization } = require('../utils/check_auth');
 let constants = require('../utils/constants');
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
-  let products = await productController.getAllProduct();
-  CreateSuccessResponse(res, products, 200);
+  let suppliers = await supplierController.getAllSupplier();
+  CreateSuccessResponse(res, suppliers, 200);
 });
 
 router.get('/:id', async function (req, res, next) {
-  let products = await productController.getProductById(req.params.id);
-  CreateSuccessResponse(res, products, 200);
+  let supplier = await supplierController.getSupplierById(req.params.id);
+  CreateSuccessResponse(res, supplier, 200);
 });
 
 router.post('/add', async function (req, res, next) {
   try {
     let body = req.body;
-    let newProduct = await productController.CreateNewProduct(body);
-    CreateSuccessResponse(res, newProduct, 200);
+    let newSupplier = await supplierController.CreateNewSupplier(body);
+    CreateSuccessResponse(res, newSupplier, 200);
   }
   catch (error) {
     next(error)
@@ -31,8 +31,8 @@ router.put('/:id', async function (req, res, next) {
   let id = req.params.id;
   try {
     let body = req.body
-    let updateProduct = await productController.ModifyProduct(id, body);
-    CreateSuccessResponse(res, updateProduct, 200);
+    let updateSupplier = await supplierController.ModifySupplier(id, body);
+    CreateSuccessResponse(res, updateSupplier, 200);
   } catch (error) {
     next(error)
   }
@@ -41,7 +41,7 @@ router.put('/:id', async function (req, res, next) {
 router.delete('/:id', async function (req, res, next) {
   let id = req.params.id;
   try {
-    let updateProduct = await productController.DeleteProduct(id);
+    let updateProduct = await supplierController.DeleteSupplier(id);
     CreateSuccessResponse(res, updateProduct, 200);
   } catch (error) {
     next(error)
