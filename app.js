@@ -33,6 +33,7 @@ app.use("/products", require("./routes/products"));
 app.use("/productAttribute", require("./routes/productAttribute"));
 app.use("/supplier", require("./routes/supplier"));
 app.use("/categories", require("./routes/categories"));
+app.use("/orders", require("./routes/orders"));
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
