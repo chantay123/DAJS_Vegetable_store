@@ -2,6 +2,7 @@ let orderModel = require("../schemas/order");
 let userModel = require("../schemas/user");
 
 module.exports = {
+   
    GetAllOrders: async function () {
       return await orderModel.find({ isDeleted: false });
    },
@@ -20,6 +21,7 @@ module.exports = {
          throw new Error(error.message);
       }
    },
+
    CreateAnOrder: async function (userId, payment_method, address, note, total_price) {
       try {
          let user = await userModel.findById(userId);
@@ -40,24 +42,7 @@ module.exports = {
          throw new Error(error.message);
       }
    },
-   // UpdateAnOrder: async function (id, payment_method, address, status, note, total_price) {
-   //    try {
-   //       let order = await orderModel.findById(id);
-   //       if(order){
-   //          order.payment_method = payment_method;
-   //          order.address = address;
-   //          order.status = status;
-   //          order.note = note;
-   //          order.total_price = total_price;
-   //          return await order.save();
-   //       }
-   //       else{
-   //          throw new Error("Khong tim thay order");
-   //       }
-   //    } catch (error) {
-   //       throw new Error(error.message);
-   //    }
-   // },
+
    UpdateAnOrder: async function (id, body) {
       try {
          let order = await orderModel.findById(id);
@@ -79,6 +64,7 @@ module.exports = {
          throw new Error(error.message);
       }
    },
+
    DeleteAnOrder: async function (id) {
       try {
          return await orderModel.findByIdAndUpdate(

@@ -76,28 +76,6 @@ router.post(
    }
 );
 
-// Cap nhat order
-// router.put(
-//    "/:id",
-//    check_authentication,
-//    check_authorization(constants.MOD_PERMISSION),
-//    async function (req, res, next) {
-//    try {
-//       let body = req.body;
-//       let order = await orderController.UpdateAnOrder(
-//          req.params.id,
-//          body.payment_method,
-//          body.address,
-//          body.status,
-//          body.note,
-//          body.total_price);
-//       CreateSuccessRes(res, order, 200);
-//    } catch (error) {
-//       next(error);
-//    }
-//    }
-// );
-
 // Cap nhat order 
 router.put(
    "/:id",
