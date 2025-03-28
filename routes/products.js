@@ -6,16 +6,20 @@ let { check_authentication, check_authorization } = require('../utils/check_auth
 let constants = require('../utils/constants');
 
 /* GET users listing. */
+
+//tạo đường dẫn lấy toàn bộ sản phẩm
 router.get('/', async function (req, res, next) {
   let products = await productController.getAllProduct();
   CreateSuccessResponse(res, products, 200);
 });
 
+//tạo đường dẫn lấy 1 sản phẩm theo id
 router.get('/:id', async function (req, res, next) {
   let products = await productController.getProductById(req.params.id);
   CreateSuccessResponse(res, products, 200);
 });
 
+//tạo đường dẫn tạo mới 1 sản phẩm
 router.post('/add', async function (req, res, next) {
   try {
     let body = req.body;
@@ -27,6 +31,7 @@ router.post('/add', async function (req, res, next) {
   }
 });
 
+// tạo đường dẫn chỉnh sửa 1 sản phẩm theo id sản phẩm
 router.put('/:id', async function (req, res, next) {
   let id = req.params.id;
   try {
@@ -38,6 +43,7 @@ router.put('/:id', async function (req, res, next) {
   }
 });
 
+// tạo đường dẫn xóa 1 sản phẩm theo id sản phẩm
 router.delete('/:id', async function (req, res, next) {
   let id = req.params.id;
   try {

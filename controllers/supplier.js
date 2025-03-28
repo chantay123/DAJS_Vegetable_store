@@ -1,6 +1,8 @@
 let supplierModel = require('../schemas/supplier');
 
 module.exports = {
+
+    //lấy toàn bộ nhà cung cấp
     getAllSupplier: async () => {
         try {
             let suppliers = await supplierModel.find({isDeleted: false});
@@ -10,6 +12,7 @@ module.exports = {
         }
     },
 
+    //lấy 1 nhà cung cấp theo id
     getSupplierById: async (id) => {
         try {
             let supplier = await supplierModel.findOne({
@@ -22,6 +25,7 @@ module.exports = {
         }
     },
 
+    //tạo mới 1 nhà cung cấp
     CreateNewSupplier: async (body) => {
         try {
             let newSupplier = new supplierModel({
@@ -42,6 +46,7 @@ module.exports = {
         }
     },
 
+    //chỉnh sửa 1 nhà cung cấp
     ModifySupplier: async (id, body) => {
         try {
             let supplier = await supplierModel.findById(id);
@@ -84,6 +89,7 @@ module.exports = {
         }
     },
 
+    //xóa 1 nhà cung cấp thông qua xóa mềm
     DeleteSupplier: async (id) => {
         try {
             let supplier = await supplierModel.findById(id);

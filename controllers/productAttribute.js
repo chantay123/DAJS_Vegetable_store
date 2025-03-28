@@ -2,6 +2,8 @@ var productAttributeModel = require('../schemas/productAttribute');
 let productModel = require('../schemas/products');
 
 module.exports = {
+
+    //lấy thông tin thuộc tính của 1 sản phẩm theo id
     getProductAttribute: async (prod_id) => {
         try {
             let product = await productModel.findOne({ _id: prod_id, is_deleted: false });
@@ -20,6 +22,7 @@ module.exports = {
         }
     },
 
+    //tạo thống tin thuộc tính cho 1 sản phẩm
     CreateNewProductAttribute: async (prod_id) => {
         try {
             console.log(prod_id);
@@ -48,11 +51,12 @@ module.exports = {
         }
     },
 
+    //chỉnh sửa thống tin thuộc tính cho 1 sản phẩm
     ModifyProductAttribute: async (prod_id, body) => {
         try {
             let product = await productModel.findOne({ _id: prod_id, is_deleted: false });
             if (product) {
-                product_attribute = await productAttributeModel.findOne({ product_id: product._id });
+                let product_attribute = await productAttributeModel.findOne({ product_id: product._id });
                 if (!product_attribute) {
                     throw new Error("khong tim thay product attribute")
                 }
