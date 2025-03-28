@@ -4,6 +4,8 @@ let productAttributeController = require('../controllers/productAttribute');
 var supplierModel = require('../schemas/supplier');
   
 module.exports = {
+
+    //lấy tất cả các sản phẩm
     getAllProduct: async () => {
         try {
             let products = await productModel.find({
@@ -18,6 +20,7 @@ module.exports = {
         }
     },
 
+    //lấy 1 sản phẩm theo id
     getProductById: async (id) => {
         try {
             let product = await productModel.findOne({
@@ -33,6 +36,7 @@ module.exports = {
         }
     },
 
+    //tạo mới 1 sản phẩm
     CreateNewProduct: async (body) => {
         try {
             category = await categoryModel.findOne({
@@ -77,6 +81,7 @@ module.exports = {
         }
     },
 
+    //chỉnh sửa 1 sản phẩm thông qua id
     ModifyProduct: async (id, body) => {
         try {
             let product = await productModel.findById(id);
@@ -125,6 +130,7 @@ module.exports = {
         }
     },
 
+    //xóa 1 sản phẩm thông quá xóa mềm
     DeleteProduct: async (id) => {
         try {
             let product = await productModel.findById(id);
