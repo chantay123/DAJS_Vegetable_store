@@ -13,7 +13,7 @@ var app = express();
 
 mongoose.connect("mongodb://localhost:27017/S5");
 mongoose.connection.on("connected", () => {
-  console.log("connected");
+    console.log("connected");
 });
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -34,17 +34,18 @@ app.use("/productAttribute", require("./routes/productAttribute"));
 app.use("/supplier", require("./routes/supplier"));
 app.use("/categories", require("./routes/categories"));
 app.use("/orders", require("./routes/orders"));
+app.use("/inventory", require("./routes/inventory"));
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  next(createError(404));
+    next(createError(404));
 });
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-  CreateErrorRes(res, err.message, err.status || 500);
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get("env") === "development" ? err : {};
+    CreateErrorRes(res, err.message, err.status || 500);
 });
 
 module.exports = app;
