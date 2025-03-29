@@ -34,7 +34,7 @@ let userSchema = mongoose.Schema(
     },
     role: {
       type: mongoose.Types.ObjectId,
-      ref: "role",
+      ref: "Role",
       required: true,
     },
     status: {
@@ -54,4 +54,4 @@ userSchema.pre("save", function (next) {
   }
   next();
 });
-module.exports = mongoose.model("user", userSchema);
+module.exports = mongoose.model("User", userSchema);

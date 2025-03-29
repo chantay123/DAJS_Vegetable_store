@@ -25,4 +25,4 @@ const StockSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-module.exports = mongoose.model("stock", StockSchema);
+module.exports = mongoose.model("Stock", StockSchema);

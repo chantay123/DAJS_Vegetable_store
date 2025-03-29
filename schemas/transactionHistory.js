@@ -9,4 +9,4 @@ const TransactionHistorySchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-module.exports = mongoose.model("transactionhistory", TransactionHistorySchema);
+module.exports = mongoose.model("TransactionHistory", TransactionHistorySchema);
