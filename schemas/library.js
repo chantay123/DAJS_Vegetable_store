@@ -6,4 +6,4 @@ const LibrarySchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-module.exports = mongoose.model("library", LibrarySchema);
+module.exports = mongoose.model("Library", LibrarySchema);

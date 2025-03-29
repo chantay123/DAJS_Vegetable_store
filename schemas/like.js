@@ -7,4 +7,4 @@ const LikeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("like", LikeSchema);
+module.exports = mongoose.model("Like", LikeSchema);

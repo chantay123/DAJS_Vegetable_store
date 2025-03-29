@@ -29,11 +29,11 @@ const OrderSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    isDeleted:{
-      type:Boolean,
-      default:false
-    }
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
-module.exports = mongoose.model("order", OrderSchema);
+module.exports = mongoose.model("Order", OrderSchema);
