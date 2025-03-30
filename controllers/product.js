@@ -40,11 +40,13 @@ module.exports = {
     CreateNewProduct: async (body) => {
         try {
             category = await categoryModel.findOne({
-                name: body.category
+                _id: body.category,
+                isDeleted: false
             })
             if (category) {
                 supplier = await supplierModel.findOne({
-                    company_name: body.supplier
+                    _id: body.supplier,
+                    isDeleted: false
                 })
                 if (!supplier) {
                     throw new Error("khong tim thay supplier")
@@ -99,7 +101,7 @@ module.exports = {
                     product.origin = body.origin;
                 }
                 if (body.supplier) {
-                    let supplier = await supplierModel.findOne({ company_name: body.supplier }); // Đảm bảo đây là ObjectId hợp lệ
+                    let supplier = await supplierModel.findOne({ _id: body.supplier }); // Đảm bảo đây là ObjectId hợp lệ
                     if (!supplier) {
                         throw new Error("khong tim thay supplier")
                     }
@@ -107,7 +109,7 @@ module.exports = {
                 }
                 if (body.category) {
                     let category = await categoryModel.findOne({
-                        name: body.category
+                        _id: body.category
                     });
                     if (!category) {
                         throw new Error("khong tim thay category")

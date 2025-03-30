@@ -32,6 +32,7 @@ router.post(
         body.username,
         body.password,
         body.email,
+        body.phone,
         body.role
       );
       CreateSuccessRes(res, user, 200);
