@@ -21,7 +21,7 @@ module.exports = {
       })
       .populate("role");
   },
-  CreateAnUser: async function (username, password, email, rolename) {
+  CreateAnUser: async function (username, password, email, phone, rolename) {
     try {
       let role = await roleModel.findOne({
         name: rolename,
@@ -31,6 +31,7 @@ module.exports = {
           username: username,
           password: password,
           email: email,
+          phone: phone,
           role: role._id,
         });
         return await user.save();
