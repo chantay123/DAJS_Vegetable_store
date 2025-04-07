@@ -36,6 +36,7 @@ router.post("/signup", async function (req, res, next) {
       body.username,
       body.password,
       body.email,
+      body.phone,
       "user"
     );
     CreateSuccessRes(
