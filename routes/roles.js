@@ -10,7 +10,7 @@ const constants = require("../utils/constants");
 
 /* GET users listing. */
 router.get("/", async function (req, res, next) {
-  let roles = await roleController.GetAllUser();
+  let roles = await roleController.GetAllRoles();
   CreateSuccessRes(res, roles, 200);
 });
 
