@@ -31,6 +31,15 @@ router.get("/:id", async function (req, res, next) {
     }
 });
 
+router.get("/product/:prod_id", async function (req, res, next) {
+    try {
+        let likes = await likeController.GetLikesByProductId(req.params.prod_id);
+        CreateSuccessRes(res, likes, 200);
+    } catch (error) {
+        next(error);
+    }
+});
+
 router.post("/", async function (req, res, next) {
     try {
         let body = req.body;
