@@ -9,6 +9,14 @@ module.exports = {
         return await likeModel.findById(id);
     },
 
+    GetLikesByProductId: async function (prod_id) {
+        try {
+            return await likeModel.find({ prod_id: prod_id });
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },    
+
     CreateALike: async function (data) {
         try {
             let newLike = new likeModel({
