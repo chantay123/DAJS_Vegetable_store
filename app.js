@@ -5,7 +5,10 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 let { CreateErrorRes } = require("./utils/responseHandler");
-var cors = require("cors");
+
+
+let cors = require("cors");
+
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");

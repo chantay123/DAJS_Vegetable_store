@@ -70,4 +70,26 @@ router.delete(
   }
 );
 
+router.get(
+  "/profile/:id",
+  // check_authentication,
+  // check_authorization(constants.MOD_PERMISSION),
+  async function (req, res, next) {
+    try {
+      let user = await userController.GetUserByID(req.params.id);
+      const userData ={
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        avatarUrl: user.avatarUrl,
+        address: user.address,
+        fullname: user.fullname,
+      }
+      CreateSuccessRes(res, userData, 200);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 module.exports = router;
