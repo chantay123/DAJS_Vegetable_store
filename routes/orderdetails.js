@@ -99,4 +99,34 @@ router.post(
    }
 );
 
+// cập nhật order detail
+router.put(
+   "/:id",
+   check_authentication,
+   check_authorization(constants.MOD_PERMISSION),
+   async function (req, res, next) {
+      try {
+         let body = req.body;
+         let orderdetail = await orderdetailController.UpdateAnOrderDetail(req.params.id, body);
+         CreateSuccessRes(res, orderdetail, 200);
+      } catch (error) {
+         next(error);
+      }
+   }
+);
+// xóa order detail
+router.delete(
+   "/:id",
+   check_authentication,
+   check_authorization(constants.MOD_PERMISSION),
+   async function (req, res, next) {
+      try {
+         let orderdetail = await orderdetailController.DeleteAnOrderDetail(req.params.id);
+         CreateSuccessRes(res, orderdetail, 200);
+      } catch (error) {
+         next(error);
+      }
+   }
+);
+
 module.exports = router;
