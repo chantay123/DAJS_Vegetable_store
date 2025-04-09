@@ -9,19 +9,32 @@ let { check_authentication } = require("../utils/check_auth");
 /* GET home page. */
 router.post("/login", async function (req, res, next) {
   try {
-    let body = req.body;
-    let username = body.username;
-    let password = body.password;
-    let userID = await userController.CheckLogin(username, password);
+    const body = req.body;
+    const username = body.username;
+    const password = body.password;
+    const userID = await userController.CheckLogin(username, password);
+    const access_token = jwt.sign(
+      {
+        id: userID,
+        expire: new Date(Date.now() + 60 * 60 * 1000).getTime(),
+      },
+      constants.SECRET_KEY,
+      { expiresIn: "1h" }
+    );
+    const refresh_token = jwt.sign(
+      {
+        id: userID,
+        type: "refresh",
+      },
+      constants.SECRET_KEY,
+      { expiresIn: "7d" }
+    );
     CreateSuccessRes(
       res,
-      jwt.sign(
-        {
-          id: userID,
-          expire: new Date(Date.now() + 60 * 60 * 1000).getTime(),
-        },
-        constants.SECRET_KEY
-      ),
+      {
+        access_token,
+        refresh_token,
+      },
       200
     );
   } catch (error) {
@@ -36,6 +49,7 @@ router.post("/signup", async function (req, res, next) {
       body.username,
       body.password,
       body.email,
+      body.phone,
       "user"
     );
     CreateSuccessRes(
@@ -72,6 +86,13 @@ router.post(
     }
   }
 );
+router.post("/logout", check_authentication, function (req, res, next) {
+  try {
+    CreateSuccessRes(res, { message: "Đăng xuất thành công" }, 200);
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.get("/me", check_authentication, async function (req, res, next) {
   console.log(req.user);
