@@ -32,8 +32,9 @@ module.exports = {
 
     CreateNewMenu: async function (body) {
         try {
+            let menu;
             if(body.parent){
-                let menu = await menuModel.findOne({name: body.parent, isDeleted: false});
+                menu = await menuModel.findOne({name: body.parent, isDeleted: false});
                 if(!menu){
                     throw new Error("khong tim thay menu");
                 }
@@ -41,7 +42,7 @@ module.exports = {
             let newMenu = new menuModel({
                 name: body.name,
                 URL: '/' + generateSlug(body.name),
-                parent: body.parent
+                parent: menu
             });
             
             return await newMenu.save();
