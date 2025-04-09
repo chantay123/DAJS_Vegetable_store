@@ -47,7 +47,7 @@ router.post("/", async function (req, res, next) {
             user_id: body.user_id,
             prod_id: body.prod_id,
         });
-        CreateSuccessRes(res, newLike, 201);
+        CreateSuccessRes(res, newLike, 200);
     } catch (error) {
         next(error);
     }
