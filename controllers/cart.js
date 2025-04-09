@@ -36,7 +36,7 @@ module.exports = {
             for (const item of data.items) {
                 const product = await productModel.findById(item.product);
                 if (!product) throw new Error("Product not found");
-                total += item.quantity * product.price;
+                total += item.quantity * product.sold;
             }
 
             const newCart = new cartModel({
@@ -64,7 +64,7 @@ module.exports = {
                 const product = await productModel.findById(item.product);
                 if (!product)
                     throw new Error("Product not found");
-                total += item.quantity * (product.price || 0);
+                total += item.quantity * (product.sold || 0);
             }
 
             cart.total_price = total;
