@@ -9,13 +9,13 @@ let {
 let constants = require("../utils/constants");
 
 //tạo đường dẫn lấy toàn bộ sản phẩm
-router.get("/", check_authentication, check_authorization(constants.ADMIN_PERMISSION), async function (req, res, next) {
+router.get("/", check_authentication, check_authorization(constants.USER_PERMISSION), async function (req, res, next) {
   let products = await productController.getAllProduct();
   CreateSuccessRes(res, products, 200);
 });
 
 //tạo đường dẫn lấy 1 sản phẩm theo id
-router.get("/:id", check_authentication, check_authorization(constants.ADMIN_PERMISSION), async function (req, res, next) {
+router.get("/:id", check_authentication, check_authorization(constants.USER_PERMISSION), async function (req, res, next) {
   let product = await productController.getProductById(req.params.id);
   CreateSuccessRes(res, product, 200);
 });

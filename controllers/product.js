@@ -46,7 +46,7 @@ module.exports = {
             })
             if (category) {
                 supplier = await supplierModel.findOne({
-                    name: body.supplier,
+                    company_name: body.supplier,
                     isDeleted: false
                 })
                 if (!supplier) {
@@ -100,7 +100,7 @@ module.exports = {
                     product.origin = body.origin;
                 }
                 if (body.supplier) {
-                    let supplier = await supplierModel.findOne({ name: body.supplier }); // Đảm bảo đây là ObjectId hợp lệ
+                    let supplier = await supplierModel.findOne({ company_name: body.supplier }); // Đảm bảo đây là ObjectId hợp lệ
                     if (!supplier) {
                         throw new Error("khong tim thay supplier")
                     }
