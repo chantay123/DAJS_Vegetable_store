@@ -19,6 +19,22 @@ router.get(
       }
    }
 );
+// lấy order detail theo user id
+router.get(
+   "/user",
+   check_authentication,
+   check_authorization(constants.USER_PERMISSION),
+   async function (req, res, next) {
+      try {
+         console.log(req.user._id);
+         let orderDetails = await orderdetailController.GetOrderDetailsByUserId(req.user._id);
+         CreateSuccessRes(res, orderDetails, 200);
+      } catch (error) {
+         next(error);
+      }
+   }
+);
+
 // lấy order detail theo id
 router.get(
    "/:id",
@@ -28,20 +44,6 @@ router.get(
       try {
          let orderdetail = await orderdetailController.GetOrderDetailById(req.params.id);
          CreateSuccessRes(res, orderdetail, 200);
-      } catch (error) {
-         next(error);
-      }
-   }
-);
-// lấy order detail theo user id
-router.get(
-   "/user",
-   check_authentication,
-   check_authorization(constants.USER_PERMISSION),
-   async function (req, res, next) {
-      try {
-         let orderDetails = await orderdetailController.GetOrderDetailsByUserId(req.user._id);
-         CreateSuccessRes(res, orderDetails, 200);
       } catch (error) {
          next(error);
       }
@@ -85,13 +87,43 @@ router.post(
       try {
          let body = req.body;
          let orderdetail = await orderdetailController.CreateAnOrderDetail(
-            req.user._id,
             body.orderId,
+            req.user._id,
             body.productId,
             body.product_attributeId,
             body.quantity,
             body.price
          );
+         CreateSuccessRes(res, orderdetail, 200);
+      } catch (error) {
+         next(error);
+      }
+   }
+);
+
+// cập nhật order detail
+router.put(
+   "/:id",
+   check_authentication,
+   check_authorization(constants.MOD_PERMISSION),
+   async function (req, res, next) {
+      try {
+         let body = req.body;
+         let orderdetail = await orderdetailController.UpdateAnOrderDetail(req.params.id, body);
+         CreateSuccessRes(res, orderdetail, 200);
+      } catch (error) {
+         next(error);
+      }
+   }
+);
+// xóa order detail
+router.delete(
+   "/:id",
+   check_authentication,
+   check_authorization(constants.MOD_PERMISSION),
+   async function (req, res, next) {
+      try {
+         let orderdetail = await orderdetailController.DeleteAnOrderDetail(req.params.id);
          CreateSuccessRes(res, orderdetail, 200);
       } catch (error) {
          next(error);

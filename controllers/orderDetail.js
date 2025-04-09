@@ -7,16 +7,16 @@ const { GetOrdersByUserId, DeleteAnOrder } = require("./orders");
 module.exports = {
 
    GetAllOrderDetails: async function () {
-      return await orderdetailModel.find({ isDeleted: false });
+      return await orderdetailModel.find({ is_deleted: false });
    },
    GetOrderDetailById: async function (id) {
-      return await orderdetailModel.findById({ _id: id, isDeleted: false });
+      return await orderdetailModel.findById({ _id: id, is_deleted: false });
    },
    GetOrderDetailsByOrderId: async function (orderId) {
       try {
-         Order = await orderModel.findById(orderId);
+         let Order = await orderModel.findById(orderId);
          if (Order) {
-            return await orderdetailModel.find({ order: Order, isDeleted: false });
+            return await orderdetailModel.find({ order: Order, is_deleted: false });
          }
          else {
             throw new Error("Khong tim thay order");
@@ -27,9 +27,11 @@ module.exports = {
    },
    GetOrderDetailsByUserId: async function (userId) {
       try {
+         console.log(userId);
          User = await userModel.findById(userId);
+         console.log(User);
          if (User) {
-            return await orderdetailModel.find({ user: User, isDeleted: false });
+            return await orderdetailModel.find({ user: User, is_deleted: false });
          } else {
             throw new Error("Khong tim thay user");
          }
@@ -39,9 +41,9 @@ module.exports = {
    },
    GetOrderDetailsByProductId: async function (productId) {
       try {
-         Product = await productModel.findById(productId);
+         let Product = await productModel.findById(productId);
          if (Product) {
-            return await orderdetailModel.find({ product: Product, isDeleted: false });
+            return await orderdetailModel.find({ product: Product, is_deleted: false });
          } else {
             throw new Error("Khong tim thay product");
          }
@@ -98,7 +100,7 @@ module.exports = {
       try {
          return await orderdetailModel.findByIdAndUpdate(
             id, {
-            isDeleted: true
+            is_deleted: true
          })
       } catch (error) {
          throw new Error(error.message);

@@ -11,6 +11,7 @@ const OrderDetailSchema = new mongoose.Schema(
     },
     quantity: { type: Number, required: true, min: 1 },
     price: { type: Number, required: true, min: 0 },
+    is_deleted: { type: Boolean, default: false }
   },
   { timestamps: true }
 );
