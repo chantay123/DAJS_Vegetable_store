@@ -77,7 +77,7 @@ router.post(
    async function (req, res, next) {
       try {
          let body = req.body;
-         let transactionHistorys = await transactionHistory.CreateATransactionHistory(body.userId, body.orderId, body.action, body.amount);
+         let transactionHistorys = await transactionHistory.CreateATransactionHistory(req.user._id, body.orderId, body.action, body.amount);
          CreateSuccessRes(res, transactionHistorys, 200);
       } catch (error) {
          next(error);
@@ -92,7 +92,7 @@ router.put(
    async function (req, res, next) {
       try {
          let body = req.body;
-         let transactionHistorys = await transactionHistory.UpdateATransactionHistory(req.params.id, body);
+         let transactionHistorys = await transactionHistory.UpdateTransactionHistory(req.params.id, body);
          CreateSuccessRes(res, transactionHistorys, 200);
       } catch (error) {
          next(error);
@@ -106,7 +106,7 @@ router.delete(
    check_authorization(constants.MOD_PERMISSION),
    async function (req, res, next) {
       try {
-         let transactionHistorys = await transactionHistory.DeleteATransactionHistory(req.params.id);
+         let transactionHistorys = await transactionHistory.DeleteTransactionHistory(req.params.id);
          CreateSuccessRes(res, transactionHistorys, 200);
       } catch (error) {
          next(error);

@@ -6,6 +6,7 @@ const TransactionHistorySchema = new mongoose.Schema(
     action: { type: String, required: true },
     amount: { type: Number },
     timestamp: { type: Date, default: Date.now },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

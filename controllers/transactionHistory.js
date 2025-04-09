@@ -38,7 +38,8 @@ module.exports = {
    CreateATransactionHistory: async function (userId, orderId, action, amount) {
       try {
          let user = await userModel.findById(userId);
-         if (user) {
+         let order = await orderModel.findById(orderId);
+         if (user && order) {
             let transactionHistory = new transHistoryModel({
                user: userId,
                order: orderId,
@@ -47,14 +48,14 @@ module.exports = {
             });
             return await transactionHistory.save();
          } else {
-            throw new Error("Khong ton tai user nay");
+            throw new Error("Khong ton tai user và order nay");
          }
       } catch (error) {
          throw new Error(error.message);
       }
    },
 
-   UpdateTransactionHistory: async function (id, data) {
+   UpdateTransactionHistory: async function (id, body) {
       try {
          let transactionHistory = await transHistoryModel.findById(id);
          if (transactionHistory) {
