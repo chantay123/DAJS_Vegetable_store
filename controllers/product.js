@@ -2,6 +2,7 @@ var productModel = require('../schemas/products');
 let categoryModel = require('../schemas/category');
 let productAttributeController = require('../controllers/productAttribute');
 var supplierModel = require('../schemas/supplier');
+const { generateSlug } = require('../utils/generate_slug');
   
 module.exports = {
 
@@ -40,12 +41,12 @@ module.exports = {
     CreateNewProduct: async (body) => {
         try {
             category = await categoryModel.findOne({
-                _id: body.category,
+                name: body.category,
                 isDeleted: false
             })
             if (category) {
                 supplier = await supplierModel.findOne({
-                    _id: body.supplier,
+                    name: body.supplier,
                     isDeleted: false
                 })
                 if (!supplier) {
@@ -53,7 +54,7 @@ module.exports = {
                 }
                 let newProduct = new productModel({
                     name: body.name,
-                    slug: body.slug,
+                    slug: generateSlug(body.name),
                     description: body.description,
                     origin: body.origin,
                     supplier: supplier._id, // Đảm bảo đây là ObjectId hợp lệ
@@ -90,9 +91,7 @@ module.exports = {
             if (product) {
                 if (body.name) {
                     product.name = body.name;
-                }
-                if (body.slug) {
-                    product.slug = body.slug;
+                    generateSlug(body.name);
                 }
                 if (body.description) {
                     product.description = body.description;
@@ -101,7 +100,7 @@ module.exports = {
                     product.origin = body.origin;
                 }
                 if (body.supplier) {
-                    let supplier = await supplierModel.findOne({ _id: body.supplier }); // Đảm bảo đây là ObjectId hợp lệ
+                    let supplier = await supplierModel.findOne({ name: body.supplier }); // Đảm bảo đây là ObjectId hợp lệ
                     if (!supplier) {
                         throw new Error("khong tim thay supplier")
                     }
@@ -109,7 +108,7 @@ module.exports = {
                 }
                 if (body.category) {
                     let category = await categoryModel.findOne({
-                        _id: body.category
+                        name: body.category
                     });
                     if (!category) {
                         throw new Error("khong tim thay category")
