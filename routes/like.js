@@ -40,11 +40,12 @@ router.get("/product/:prod_id", async function (req, res, next) {
     }
 });
 
-router.post("/", async function (req, res, next) {
+router.post("/", check_authentication, async function (req, res, next) {
     try {
         let body = req.body;
+        let userId = req.user.id;
         let newLike = await likeController.CreateALike({
-            user_id: body.user_id,
+            user_id: userId,
             prod_id: body.prod_id,
         });
         CreateSuccessRes(res, newLike, 200);
