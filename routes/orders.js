@@ -8,8 +8,6 @@ let {check_authentication, check_authorization} = require("../utils/check_auth")
  // Lay tat ca order
 router.get(
    "/",
-   check_authentication,
-   check_authorization(constants.MOD_PERMISSION),
    async function (req, res, next) {
    try {
       let orders = await orderController.GetAllOrders();
