@@ -138,7 +138,7 @@ module.exports = {
             if (!product) {
                 throw new Error("khong tim thay product")
             }
-            product.isDeleted = true;
+            product.is_deleted = true;
             return await product.save();
         } catch (error) {
             throw new Error(error.message)
