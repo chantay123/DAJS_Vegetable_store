@@ -7,7 +7,7 @@ module.exports = {
         return await cartModel
             .find()
             .populate("user")
-            .populate("items.product");
+            .populate("items.product_id");
     },
 
     // 2. Lấy cart theo ID
@@ -15,7 +15,7 @@ module.exports = {
         return await cartModel
             .findById(id)
             .populate("user")
-            .populate("items.product");
+            .populate("items.product_id");
     },
 
     // 3. Lấy tất cả cart theo user
@@ -25,7 +25,7 @@ module.exports = {
         });
         let cart = await cartModel
             .findOne({ user: user._id })
-            .populate("items.product");
+            .populate("items.product_id");
         return cart;
     },
     // 4. Lấy cart theo userId
