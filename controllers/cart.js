@@ -7,7 +7,14 @@ module.exports = {
         return await cartModel
             .find()
             .populate("user")
-            .populate("items.product_id");
+            .populate({
+                path: 'items.product_id',
+                select: 'name slug origin supplier category',
+                populate: {
+                    path: 'productAttributes',
+                    select: 'weight original_price discount_price discount_percent quantity color'
+                }
+            });
     },
 
     // 2. Lấy cart theo ID
@@ -15,7 +22,14 @@ module.exports = {
         return await cartModel
             .findById(id)
             .populate("user")
-            .populate("items.product_id");
+            .populate({
+                path: 'items.product_id',
+                select: 'name slug origin supplier category',
+                populate: {
+                    path: 'productAttributes',
+                    select: 'weight original_price discount_price discount_percent quantity color'
+                }
+            });
     },
 
     // 3. Lấy tất cả cart theo user
@@ -25,15 +39,29 @@ module.exports = {
         });
         let cart = await cartModel
             .findOne({ user: user._id })
-            .populate("items.product_id");
+            .populate({
+                path: 'items.product_id',
+                select: 'name slug origin supplier category',
+                populate: {
+                    path: 'productAttributes',
+                    select: 'weight original_price discount_price discount_percent quantity color'
+                }
+            });
         return cart;
     },
     // 4. Lấy cart theo userId
     GetCartByUserId: async function (userId) {
         return await cartModel
             .findOne({ user: userId })
-            .populate("items.product_id")
-            .populate("user");
+            .populate("user")
+            .populate({
+                path: 'items.product_id',
+                select: 'name slug origin supplier category',
+                populate: {
+                    path: 'productAttributes',
+                    select: 'weight original_price discount_price discount_percent quantity color'
+                }
+            });
     },
     // 5. Tạo cart mới
     CreateACart: async function (data, user) {
@@ -46,13 +74,43 @@ module.exports = {
                 total += item.quantity * product.sold;
             }
 
-            const newCart = new cartModel({
-                user: user._id,
-                items: data.items,
-                total_price: total,
-            });
+            user = await userModel.findById(user);
+            if (!user) throw new Error("User not found");
 
-            return await newCart.save();
+            const cart = await cartModel.findOne({ user: user._id });
+            if (cart) {
+                for (let index = 0; index < cart.items.length; index++) {
+                    cart.items[index].quantity += data.items[index].quantity;
+                    const product = await productModel.findById(cart.items[index].product_id);
+                    if (!product) throw new Error("Product not found");
+                    total += cart.items[index].quantity * product.sold;
+                }
+                cart.total_price = total;
+                var result = await cart.save();
+                return result = await result.populate({
+                    path: 'items.product_id',
+                    select: 'name slug origin supplier category',
+                    populate: {
+                        path: 'productAttributes',
+                        select: 'weight original_price discount_price discount_percent quantity color'
+                    }
+                });
+            }
+            else {
+                const newCart = new cartModel({
+                    user: user._id,
+                    items: data.items,
+                    total_price: total,
+                });
+                return await newCart.save().populate({
+                    path: 'items.product_id',
+                    select: 'name slug origin supplier category',
+                    populate: {
+                        path: 'productAttributes',
+                        select: 'weight original_price discount_price discount_percent quantity color'
+                    }
+                });
+            }
         } catch (error) {
             throw new Error(error.message);
         }
@@ -74,7 +132,14 @@ module.exports = {
             }
 
             cart.total_price = total;
-            return await cart.save();
+            return await cart.save().populate({
+                path: 'items.product_id',
+                select: 'name slug origin supplier category',
+                populate: {
+                    path: 'productAttributes',
+                    select: 'weight original_price discount_price discount_percent quantity color'
+                }
+            });
         } catch (error) {
             throw new Error(error.message);
         }
