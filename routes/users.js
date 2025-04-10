@@ -32,6 +32,7 @@ router.post(
         body.username,
         body.password,
         body.email,
+        body.phone,
         body.role
       );
       CreateSuccessRes(res, user, 200);
@@ -63,6 +64,28 @@ router.delete(
       let body = req.body;
       let user = await userController.DeleteAnUser(req.params.id);
       CreateSuccessRes(res, user, 200);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get(
+  "/profile/:id",
+  // check_authentication,
+  // check_authorization(constants.MOD_PERMISSION),
+  async function (req, res, next) {
+    try {
+      let user = await userController.GetUserByID(req.params.id);
+      const userData ={
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        avatarUrl: user.avatarUrl,
+        address: user.address,
+        fullname: user.fullname,
+      }
+      CreateSuccessRes(res, userData, 200);
     } catch (error) {
       next(error);
     }

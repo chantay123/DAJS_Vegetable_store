@@ -1,42 +1,46 @@
 var express = require("express");
 var router = express.Router();
-let categoryModel = require("../schemas/category");
 let { CreateErrorRes, CreateSuccessRes } = require("../utils/responseHandler");
 const {
   check_authorization,
   check_authentication,
 } = require("../utils/check_auth");
 const constants = require("../utils/constants");
+let categoryController = require("../controllers/category");
+
 /* GET users listing. */
 router.get("/", async function (req, res, next) {
-  let products = await categoryModel.find({
-    isDeleted: false,
-  });
-  CreateSuccessRes(res, products, 200);
+  let categories = await categoryController.GetAllCategory();
+  CreateSuccessRes(res, categories, 200);
 });
 router.get("/:id", async function (req, res, next) {
   try {
-    let product = await categoryModel.findOne({
-      _id: req.params.id,
-      isDeleted: false,
-    });
-    CreateSuccessRes(res, product, 200);
+    let category = await categoryController.GetCategoryById(req.params.id);
+    if (!category) {
+      CreateErrorRes(res, "Category not found", 404);
+      return;
+    }
+    CreateSuccessRes(res, category, 200);
   } catch (error) {
     next(error);
   }
 });
+
+
 router.post(
   "/",
-  check_authentication,
-  check_authorization(constants.MOD_PERMISSION),
+  // check_authentication,
+  // check_authorization(constants.MOD_PERMISSION),
   async function (req, res, next) {
     try {
-      let body = req.body;
-      let newProduct = new categoryModel({
+      let body = req.body; // Lấy dữ liệu từ request body
+      // Gọi controller để tạo mới category
+      let newCategory = await categoryController.CreateACategory({
         name: body.name,
+        description: body.description,
+        image: body.image,
       });
-      await newProduct.save();
-      CreateSuccessRes(res, newProduct, 200);
+      CreateSuccessRes(res, newCategory, 200);
     } catch (error) {
       next(error);
     }
@@ -49,19 +53,19 @@ router.put(
   async function (req, res, next) {
     let id = req.params.id;
     try {
-      let body = req.body;
-      let updatedInfo = {};
-      if (body.name) {
-        updatedInfo.name = body.name;
+      let category = await categoryController.GetCategoryById(id);
+      if (!category) {
+        return CreateErrorRes(res, "Category not found", 404);
       }
-      let updateProduct = await categoryModel.findByIdAndUpdate(
-        id,
-        updatedInfo,
-        {
-          new: true,
-        }
-      );
-      CreateSuccessRes(res, updateProduct, 200);
+      let body = req.body;
+      // Gọi controller để cập nhật category
+      let updatedCategory = await categoryController.UpdateACategory(id, {
+        name: body.name,
+        description: body.description,
+        image: body.image,
+      });
+
+      CreateSuccessRes(res, updatedCategory, 200);
     } catch (error) {
       next(error);
     }
@@ -74,14 +78,12 @@ router.delete(
   async function (req, res, next) {
     let id = req.params.id;
     try {
-      let updateProduct = await categoryModel.findByIdAndUpdate(
-        id,
-        {
-          isDeleted: true,
-        },
-        { new: true }
-      );
-      CreateSuccessRes(res, updateProduct, 200);
+      let category = await categoryController.GetCategoryById(id);
+      if (!category) {
+        return CreateErrorRes(res, "Category not found", 404);
+      }
+      let deletedCategory = await categoryController.DeleteACategory(id);
+      CreateSuccessRes(res, "Category has been deleted", 200);
     } catch (error) {
       next(error);
     }

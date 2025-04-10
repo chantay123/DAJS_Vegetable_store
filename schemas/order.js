@@ -12,19 +12,28 @@ const OrderSchema = new mongoose.Schema(
     address: {
       type: String,
       required: true,
+      trim: true,
     },
     note: {
       type: String,
+      trim: true,
+      default: "",
     },
     total_price: {
       type: Number,
       required: true,
+      min: 0,
+      default: 0,
     },
     order_date: {
       type: Date,
       default: Date.now,
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
-module.exports = mongoose.model("order", OrderSchema);
+module.exports = mongoose.model("Order", OrderSchema);

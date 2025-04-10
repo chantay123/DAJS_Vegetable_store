@@ -6,7 +6,8 @@ const TransactionHistorySchema = new mongoose.Schema(
     action: { type: String, required: true },
     amount: { type: Number },
     timestamp: { type: Date, default: Date.now },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
-module.exports = mongoose.model("transactionhistory", TransactionHistorySchema);
+module.exports = mongoose.model("TransactionHistory", TransactionHistorySchema);
