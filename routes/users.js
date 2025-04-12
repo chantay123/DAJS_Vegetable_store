@@ -11,7 +11,7 @@ let constants = require("../utils/constants");
 router.get(
   "/",
   check_authentication,
-  check_authorization(constants.MOD_PERMISSION),
+  check_authorization(constants.USER_PERMISSION),
   async function (req, res, next) {
     try {
       let users = await userController.GetAllUsers();
@@ -71,20 +71,21 @@ router.delete(
 );
 
 router.get(
-  "/profile/:id",
+  "/profile",
   // check_authentication,
   // check_authorization(constants.MOD_PERMISSION),
   async function (req, res, next) {
     try {
+    
       let user = await userController.GetUserByID(req.params.id);
-      const userData ={
+      const userData = {
         username: user.username,
         email: user.email,
         phone: user.phone,
         avatarUrl: user.avatarUrl,
         address: user.address,
         fullname: user.fullname,
-      }
+      };
       CreateSuccessRes(res, userData, 200);
     } catch (error) {
       next(error);

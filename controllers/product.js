@@ -3,7 +3,7 @@ let categoryModel = require('../schemas/category');
 let productAttributeController = require('../controllers/productAttribute');
 var supplierModel = require('../schemas/supplier');
 const { generateSlug } = require('../utils/generate_slug');
-  
+
 module.exports = {
 
     //lấy tất cả các sản phẩm
@@ -12,9 +12,9 @@ module.exports = {
             let products = await productModel.find({
                 is_deleted: false
             })
-            .populate({path: 'category', select: 'name'})
-            .populate({path: 'supplier', select: 'company_name'})
-            .populate({path: 'productAttributes', select: 'weight original_price discount_price discount_percent quantity color'});
+                .populate({ path: 'category', select: 'name' })
+                .populate({ path: 'supplier', select: 'company_name' })
+                .populate({ path: 'productAttributes', select: 'weight original_price discount_price discount_percent quantity color' });
             return products;
         } catch (error) {
             throw new Error(error.message)
@@ -28,9 +28,9 @@ module.exports = {
                 _id: id,
                 is_deleted: false
             })
-            .populate({path: 'category', select: 'name'})
-            .populate({path: 'supplier', select: 'company_name'})
-            .populate({path: 'productAttributes', select: 'weight original_price discount_price discount_percent quantity color'});
+                .populate({ path: 'category', select: 'name' })
+                .populate({ path: 'supplier', select: 'company_name' })
+                .populate({ path: 'productAttributes', select: 'weight original_price discount_price discount_percent quantity color' });
             return product;
         } catch (error) {
             throw new Error(error.message)
@@ -57,8 +57,8 @@ module.exports = {
                     slug: generateSlug(body.name),
                     description: body.description,
                     origin: body.origin,
-                    supplier: supplier._id, // Đảm bảo đây là ObjectId hợp lệ
-                    category: category._id, // Đảm bảo đây là ObjectId hợp lệ
+                    supplier: supplier._id, 
+                    category: category._id, 
                     thumbnail_url: body.thumbnail_url,
                     images: body.images,
                 });
@@ -99,8 +99,11 @@ module.exports = {
                 if (body.origin) {
                     product.origin = body.origin;
                 }
+                if (body.sold) {
+                    product.sold = body.sold;
+                }
                 if (body.supplier) {
-                    let supplier = await supplierModel.findOne({ company_name: body.supplier }); // Đảm bảo đây là ObjectId hợp lệ
+                    let supplier = await supplierModel.findOne({ company_name: body.supplier }); 
                     if (!supplier) {
                         throw new Error("khong tim thay supplier")
                     }
@@ -144,5 +147,5 @@ module.exports = {
             throw new Error(error.message)
         }
     }
-    
+
 }

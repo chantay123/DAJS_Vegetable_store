@@ -19,7 +19,7 @@ router.post("/login", async function (req, res, next) {
         expire: new Date(Date.now() + 60 * 60 * 1000).getTime(),
       },
       constants.SECRET_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: "1d" }
     );
     const refresh_token = jwt.sign(
       {

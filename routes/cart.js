@@ -110,7 +110,22 @@ router.delete(
     async function (req, res, next) {
         try {
             let id = req.params.id;
-            let deletedCart = await cartController.DeleteACart(id);
+            await cartController.DeleteACart(id);
+            CreateSuccessRes(res, "Cart has been deleted", 200);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+router.delete(
+    "/product/:id",
+    check_authentication,
+    async function (req, res, next) {
+        try {
+            let id = req.params.id;
+            let body = req.body
+            await cartController.DeleteProCart(id, body);
             CreateSuccessRes(res, "Cart has been deleted", 200);
         } catch (error) {
             next(error);
