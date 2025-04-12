@@ -1,8 +1,8 @@
 let orderModel = require("../schemas/order");
 let userModel = require("../schemas/user");
-
+var cartModel = require("../schemas/cart");
+let cartController = require("../controllers/cart");
 module.exports = {
-   
    GetAllOrders: async function () {
       return await orderModel.find({ isDeleted: false });
    },
@@ -22,20 +22,37 @@ module.exports = {
       }
    },
 
-   CreateAnOrder: async function (userId, payment_method, address, note, total_price) {
+   CreateAnOrder: async function (
+      userId,
+      payment_method,
+      address,
+      note,
+      total_price,
+      phone
+   ) {
       try {
          let user = await userModel.findById(userId);
-         if(user){
+         if (user) {
             let order = new orderModel({
                user: userId,
+               phone: phone,
                payment_method: payment_method,
                address: address,
                note: note,
-               total_price: total_price
+               total_price: total_price,
             });
-            return await order.save();
-         }
-         else{
+            let result = await order.save();
+
+            let cart = await cartModel.findOne({ user: userId });
+
+            if (!cart) {
+               throw new Error("cart đâu");
+            }
+
+            await cartController.DeleteACart(cart._id);
+
+            return result;
+         } else {
             throw new Error("Khong ton tai user nay");
          }
       } catch (error) {
@@ -47,17 +64,23 @@ module.exports = {
       try {
          let order = await orderModel.findById(id);
          if (order) {
-            const allowedFields = ["payment_method", "address", "status", "note", "total_price"];
+            const allowedFields = [
+               "payment_method",
+               "address",
+               "status",
+               "note",
+               "total_price",
+            ];
 
             // Chỉ cập nhật các trường được gửi trong updates và nằm trong allowedFields
             for (const field of allowedFields) {
-               if (body[field] !== undefined) { // Kiểm tra xem field có được gửi không
+               if (body[field] !== undefined) {
+                  // Kiểm tra xem field có được gửi không
                   order[field] = body[field];
                }
             }
             return await order.save();
-         }  
-         else{
+         } else {
             throw new Error("Khong tim thay order");
          }
       } catch (error) {
@@ -67,12 +90,11 @@ module.exports = {
 
    DeleteAnOrder: async function (id) {
       try {
-         return await orderModel.findByIdAndUpdate(
-                         id, {
-                         isDeleted: true
-                     })
+         return await orderModel.findByIdAndUpdate(id, {
+            isDeleted: true,
+         });
       } catch (error) {
          throw new Error(error.message);
       }
    },
-}
+};

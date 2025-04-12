@@ -36,6 +36,7 @@ router.put("/:id", check_authentication, check_authorization(constants.ADMIN_PER
   let id = req.params.id;
   try {
     let body = req.body;
+    console.log(body);
     let updateProduct = await productController.ModifyProduct(id, body);
     CreateSuccessRes(res, updateProduct, 200);
   } catch (error) {
